@@ -1,0 +1,3 @@
+python -m venv .TCC
+.TCC/scripts/activate
+pip install -r requirements.txt

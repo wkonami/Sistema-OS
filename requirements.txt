@@ -1,0 +1,5 @@
+tk
+dotenv 
+psycopg2
+bcrypt 
+PILLOW
