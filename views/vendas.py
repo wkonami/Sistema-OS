@@ -7,7 +7,20 @@ from config import FONT_NAME, ICON_PATH
 from views.selecionar_cliente import SelecionarClienteWindow
 
 class VendasWindow:
+    instance = None  # Variável de classe para armazenar a instância ativa
+
     def __init__(self, pos_x=100, pos_y=100):
+        # Verifica se já existe uma instância e se a janela ainda está aberta.
+        if VendasWindow.instance is not None and tk.Toplevel.winfo_exists(VendasWindow.instance.win):
+            VendasWindow.instance.win.deiconify()
+            # Traz a janela já aberta para frente e sai da inicialização.
+            VendasWindow.instance.win.lift()
+            VendasWindow.instance.win.focus_force()
+            return
+        
+        # Se não existe, cria a nova janela e a armazena na variável de classe.
+        VendasWindow.instance = self
+
         self.win = tk.Toplevel()
         self.win.title("Vendas")
         self.win.geometry(f"700x550+{pos_x}+{pos_y}")
@@ -271,6 +284,7 @@ class VendasWindow:
             cur.close()
             messagebox.showinfo("Sucesso", "Venda realizada com sucesso!")
             self.win.destroy()
+            VendasWindow.instance = None  # Limpa a referência para permitir nova instância
             # Se houver referência global da dashboard, atualize-a
             try:
                 from globals import current_dashboard

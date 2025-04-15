@@ -11,7 +11,17 @@ from globals import current_dashboard
 
 # --- Janela de Cadastro/Pesquisa de Clientes ---
 class CadastroWindow:
+    instance = None 
+
     def __init__(self, pos_x=100, pos_y=100):
+        if CadastroWindow.instance is not None and tk.Toplevel.winfo_exists(CadastroWindow.instance.win):
+
+            CadastroWindow.instance.win.deiconify()
+            CadastroWindow.instance.win.lift()
+            CadastroWindow.instance.win.focus_force()
+            return
+        
+        CadastroWindow.instance = self
         self.win = tk.Toplevel()
         self.win.title("Cadastro e Pesquisa de Clientes")
         self.win.geometry(f"{MAIN_WIDTH}x{MAIN_HEIGHT}+{pos_x}+{pos_y}")

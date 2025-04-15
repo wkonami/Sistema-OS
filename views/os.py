@@ -11,7 +11,16 @@ from views.selecionar_cliente import SelecionarClienteWindow
 # Janela de Gerenciamento de Ordens de Serviço
 # ---------------------------
 class OrdemServicoWindow:
+    instance = None
+
     def __init__(self, pos_x=100, pos_y=100):
+        if OrdemServicoWindow.instance is not None and tk.Toplevel.winfo_exists(OrdemServicoWindow.instance.win):
+            OrdemServicoWindow.instance.win.deiconify()
+            OrdemServicoWindow.instance.win.lift()
+            OrdemServicoWindow.instance.win.focus_force()
+            return
+        OrdemServicoWindow.instance = self
+
         self.win = tk.Toplevel()
         self.win.title("Ordens de Serviço")
         self.win.geometry(f"800x600+{pos_x}+{pos_y}")
@@ -258,6 +267,7 @@ class CriarOSWindow:
             cur.close()
             messagebox.showinfo("Sucesso", "Ordem de Serviço criada com sucesso!", parent=self.win)
             self.win.destroy()
+            OrdemServicoWindow.instance = None
         except Exception as e:
             logging.error("Erro ao criar a OS: %s", e)
             messagebox.showerror("Erro", "Erro interno ao criar a OS.", parent=self.win)
@@ -361,6 +371,7 @@ class AlterarOSWindow:
             cur.close()
             messagebox.showinfo("Sucesso", "OS alterada com sucesso!", parent=self.win)
             self.win.destroy()
+            OrdemServicoWindow.instance = None
         except Exception as e:
             logging.error("Erro ao salvar alterações na OS: %s", e)
             messagebox.showerror("Erro", "Erro interno ao salvar alterações.", parent=self.win)

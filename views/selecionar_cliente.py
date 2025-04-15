@@ -5,14 +5,16 @@ from database import get_connection
 from config import FONT_NAME
 
 class SelecionarClienteWindow:
+    instance = None
     def __init__(self, callback, pos_x=100, pos_y=100):
-        """
-        Janela para selecionar um cliente.
+        if SelecionarClienteWindow.instance is not None and tk.Toplevel.winfo_exists(SelecionarClienteWindow.instance):
+            SelecionarClienteWindow.instance.win.deiconify()
+            SelecionarClienteWindow.instance.win.lift()
+            SelecionarClienteWindow.instance.win.focus_force()
+            return
         
-        Parâmetros:
-          callback: função que será chamada com os dados do cliente selecionado (ex: callback(cliente))
-          pos_x, pos_y: posição inicial da janela (para efeito cascata)
-        """
+        SelecionarClienteWindow.instance = self
+        
         self.callback = callback
         self.win = tk.Toplevel()
         self.win.title("Selecionar Cliente")
@@ -112,3 +114,5 @@ class SelecionarClienteWindow:
         client_data = self.tree.item(selected, "values")
         self.callback(client_data)
         self.win.destroy()
+        SelecionarClienteWindow.instance = None
+

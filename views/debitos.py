@@ -10,7 +10,17 @@ from globals import current_dashboard
 
 # --- Janela de Controle de Débitos/Créditos ---
 class DebitosWindow:
+    instance = None
+
     def __init__(self, pos_x=100, pos_y=100):
+        if DebitosWindow.instance is not None and tk.Toplevel.winfo_exists(DebitosWindow.instance.win):
+            DebitosWindow.instance.win.deiconify()
+            DebitosWindow.instance.win.lift()
+            DebitosWindow.instance.win.focus_force()
+            return
+        
+        DebitosWindow.instance = self
+
         self.win = tk.Toplevel()
         self.win.title("Controle de Débitos/Créditos")
         self.win.geometry(f"500x400+{pos_x}+{pos_y}")
